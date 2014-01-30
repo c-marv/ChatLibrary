@@ -5,7 +5,7 @@ public class Client extends MessageHandler implements Runnable {
 	protected Scanner input;
 	protected PrintStream output;
 	protected Thread clientThread;
-	
+	protected UserInformation userInformation;
 	public Client() {
 		
 	}
@@ -26,6 +26,7 @@ public class Client extends MessageHandler implements Runnable {
 			try {
 				if (input.hasNextLine()) {
 					Message message = JsonConverter.JsonStringToMessage(this.input.nextLine());
+					message.setSourceIP(this.userInformation.getUserIP());
 					MessageEvent event = new MessageEvent(this, message);
 					this.FireMessage(event);
 				}

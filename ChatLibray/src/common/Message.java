@@ -2,10 +2,13 @@ package common;
 
 public class Message {
 	private String sourceIP, destinationIP, text;
-	public Message(String sourceIP, String destinationIP, String text) {
-		this.sourceIP = sourceIP;
+	public Message(String destinationIP, String text) {
 		this.destinationIP = destinationIP;
 		this.text = text;
+	}
+	public Message(String sourceIP, String destinationIP, String text) {
+		this(destinationIP, text);
+		this.sourceIP = sourceIP;
 	}
 	public String getSourceIP() {
 		return sourceIP;

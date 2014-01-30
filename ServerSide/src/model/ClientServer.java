@@ -5,9 +5,9 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import common.Client;
+import common.UserInformation;
 
 public class ClientServer extends Client {
-	private String clientIP;
 	public ClientServer(Socket socket) {
 		super();
 		Initialize(socket);
@@ -16,12 +16,12 @@ public class ClientServer extends Client {
 		try {
 			this.input = new Scanner(socket.getInputStream());
 			this.output = new PrintStream(socket.getOutputStream());
-			this.clientIP = socket.getLocalAddress().getHostAddress();
+			this.userInformation = new UserInformation(socket.getLocalAddress().getHostAddress(), "");
 		} catch (Exception e) {
 			System.out.println("Error to initialize client");
 		}
 	}
-	public String getIP() {
-		return clientIP;
+	public UserInformation getUserInformation() {
+		return this.userInformation;
 	}
 }
