@@ -4,8 +4,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import common.Client;
 import common.JsonConverter;
 import common.Message;
 import common.MessageEvent;
@@ -77,6 +75,8 @@ public class Server implements Runnable, MessageListener {
 		} else if (e.getMessage().getDestinationIP().equals("SERVER")) {
 			if (e.getMessage().getText().equals("DISCONNECT")) {
 				clients.remove(e.getMessage().getSourceIP());
+			}else if(e.getMessage().getText().equals("INVISIBLE")) {
+				
 			}
 		} else {
 			ClientServer client = clients.get(e.getMessage().getDestinationIP());

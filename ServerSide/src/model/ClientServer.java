@@ -3,7 +3,6 @@ package model;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
-
 import common.Client;
 import common.UserInformation;
 
