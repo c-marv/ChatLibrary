@@ -10,7 +10,7 @@ import common.MessageEvent;
 import common.MessageListener;
 import common.UserInformation;
 
-public class Server implements Runnable, MessageListener {
+public class Server extends ServerHandler implements Runnable, MessageListener {
 	private ServerSocket serverSocket;
 	private Thread serverThread;
 	private HashMap<UserInformation, ClientServer> clients;
@@ -19,17 +19,21 @@ public class Server implements Runnable, MessageListener {
 		try {
 			serverSocket = new ServerSocket(port);
 			clients = new HashMap<UserInformation, ClientServer>();
+			this.OccurredEvent(new ServerEvent(this, "Servidor creado en el puerto " + port + " correctamente", ServerHelper.DisplayText));
+			this.StartServer();
 		} catch (Exception e) {
-			e.printStackTrace();
+			this.OccurredEvent(new ServerEvent(this, "No se puede crear el servidor en el puerto " + port + " por que esta siendo utilizado por otro proceso.", ServerHelper.Error));
 		}
 	}
 	public void StartServer() {
 		serverThread = new Thread(this);
 		serverThread.start();
+		this.OccurredEvent(new ServerEvent(this, "Servidor corriendo ...", ServerHelper.DisplayText));
 		System.out.println("Server Running ...");
 	}
 	public void StopServer() {
 		serverThread.interrupt();
+		this.OccurredEvent(new ServerEvent(this, "Servidor detenido ...", ServerHelper.DisplayText));
 		System.out.print("Server Stoped ...");
 	}
 	@Override
