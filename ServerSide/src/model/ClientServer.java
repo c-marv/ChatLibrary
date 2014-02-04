@@ -4,6 +4,8 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 import common.Client;
+import common.JsonConverter;
+import common.Message;
 import common.UserInformation;
 
 public class ClientServer extends Client {
@@ -15,7 +17,8 @@ public class ClientServer extends Client {
 		try {
 			this.input = new Scanner(socket.getInputStream());
 			this.output = new PrintStream(socket.getOutputStream());
-			this.userInformation = new UserInformation(socket.getLocalAddress().getHostAddress(), "");
+			Message message = JsonConverter.JsonStringToMessage(this.input.nextLine());
+			this.userInformation = new UserInformation(socket.getLocalAddress().getHostAddress(), message.getText());
 		} catch (Exception e) {
 			System.out.println("Error to initialize client");
 		}

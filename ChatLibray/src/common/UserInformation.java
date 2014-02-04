@@ -24,4 +24,8 @@ public class UserInformation {
 		UserInformation userInformation = (UserInformation)obj;
 		return this.userIP.equals(userInformation.userIP) & this.username.equals(userInformation.username);
 	}
+	@Override
+	public String toString() {
+		return this.userIP + " " + this.username;
+	}
 }

@@ -19,10 +19,9 @@ public class Server extends ServerHandler implements Runnable, MessageListener {
 		try {
 			serverSocket = new ServerSocket(port);
 			clients = new HashMap<UserInformation, ClientServer>();
-			this.OccurredEvent(new ServerEvent(this, "Servidor creado en el puerto " + port + " correctamente", ServerHelper.DisplayText));
-			this.StartServer();
+			//this.OccurredEvent(new ServerEvent(this, "Servidor creado en el puerto " + port + " correctamente", ServerHelper.DisplayText));
 		} catch (Exception e) {
-			this.OccurredEvent(new ServerEvent(this, "No se puede crear el servidor en el puerto " + port + " por que esta siendo utilizado por otro proceso.", ServerHelper.Error));
+			//this.OccurredEvent(new ServerEvent(this, "No se puede crear el servidor en el puerto " + port + " por que esta siendo utilizado por otro proceso.", ServerHelper.Error));
 		}
 	}
 	public void StartServer() {
@@ -47,6 +46,7 @@ public class Server extends ServerHandler implements Runnable, MessageListener {
 					client.StartReadMessages();
 					clients.put(client.getUserInformation(), client);
 					// Actualizar la lista de de usuarios conectados a todos los clientes
+					System.out.println(client.getUserInformation().toString());
 					UpdateListClients();
 				}
 			} catch (Exception e) {
@@ -79,8 +79,8 @@ public class Server extends ServerHandler implements Runnable, MessageListener {
 		} else if (e.getMessage().getDestinationIP().equals("SERVER")) {
 			if (e.getMessage().getText().equals("DISCONNECT")) {
 				clients.remove(e.getMessage().getSourceIP());
-			}else if(e.getMessage().getText().equals("INVISIBLE")) {
-				
+			} else {
+				System.out.println("Username: " + e.getMessage().getText());
 			}
 		} else {
 			ClientServer client = clients.get(e.getMessage().getDestinationIP());

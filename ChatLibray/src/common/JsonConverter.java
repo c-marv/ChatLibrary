@@ -14,7 +14,7 @@ public class JsonConverter {
 		return Converter.fromJson(json, Message.class);
 	}
 	public static String ListToJsonString(ArrayList<UserInformation> users) {
-		return Converter.toJson(users, UserInformation[].class);
+		return Converter.toJson(users);
 	}
 	public static ArrayList<UserInformation> JsonStringToList(String json) {
 		UserInformation[] list = Converter.fromJson(json, UserInformation[].class);
