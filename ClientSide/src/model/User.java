@@ -3,8 +3,8 @@ package model;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Scanner;
-
 import common.Client;
 import common.Message;
 import common.UserInformation;
@@ -21,7 +21,6 @@ public class User extends Client{
 			this.output = new PrintStream(this.socket.getOutputStream());
 			this.userInformation = new UserInformation(InetAddress.getLocalHost().getHostAddress(), username);
 			this.WriteOutputMessage(new Message("SERVER", username));
-			this.StartReadMessages();
 		} catch (Exception e) {
 			
 		}

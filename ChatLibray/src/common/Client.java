@@ -9,7 +9,7 @@ public class Client extends MessageHandler implements Runnable {
 	public Client() {
 		
 	}
-	public void WriteOutputMessage(Message message) {
+	public synchronized void WriteOutputMessage(Message message) {
 		String jsonmessage = JsonConverter.MessageToJsonString(message);
 		this.output.println(jsonmessage);
 	}
@@ -31,7 +31,7 @@ public class Client extends MessageHandler implements Runnable {
 					this.FireMessage(event);
 				}
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				System.out.println("Error Read Message");
 			}
 		}
 	}
