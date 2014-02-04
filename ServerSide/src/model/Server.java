@@ -4,8 +4,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import common.Client;
 import common.JsonConverter;
 import common.Message;
 import common.MessageEvent;
@@ -29,12 +27,12 @@ public class Server extends ServerHandler implements Runnable, MessageListener {
 	public void StartServer() {
 		serverThread = new Thread(this);
 		serverThread.start();
-		this.OccurredEvent(new ServerEvent(this, "Servidor corriendo ...", ServerHelper.DisplayText));
+		//this.OccurredEvent(new ServerEvent(this, "Servidor corriendo ...", ServerHelper.DisplayText));
 		System.out.println("Server Running ...");
 	}
 	public void StopServer() {
 		serverThread.interrupt();
-		this.OccurredEvent(new ServerEvent(this, "Servidor detenido ...", ServerHelper.DisplayText));
+		//this.OccurredEvent(new ServerEvent(this, "Servidor detenido ...", ServerHelper.DisplayText));
 		System.out.print("Server Stoped ...");
 	}
 	@Override
@@ -80,11 +78,22 @@ public class Server extends ServerHandler implements Runnable, MessageListener {
 			}
 		} else if (e.getMessage().getDestinationIP().equals("SERVER")) {
 			if (e.getMessage().getText().equals("DISCONNECT")) {
-				clients.remove(e.getMessage().getSourceIP());
+				ClientServer client = this.GetClientByIP(e.getMessage().getSourceIP());
+				client.StopReadMessages();
+				System.out.println("Disconnect " + client.getUserInformation().getUsername());
+				clients.remove(client.getUserInformation());
 			}
 		} else {
-			ClientServer client = clients.get(e.getMessage().getDestinationIP());
+			ClientServer client = this.GetClientByIP(e.getMessage().getDestinationIP());
 			client.WriteOutputMessage(e.getMessage());
 		}
+	}
+	public ClientServer GetClientByIP(String ip) {
+		for (UserInformation item : clients.keySet()) {
+			if (item.getUserIP().equals(ip)) {
+				return clients.get(item);
+			}
+		}
+		return null;
 	}
 }

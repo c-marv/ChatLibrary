@@ -23,7 +23,9 @@ import common.MessageListener;
 import common.UserInformation;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-public class ClientWindow extends MouseAdapter implements MessageListener{
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+public class ClientWindow extends MouseAdapter  implements MessageListener{
 	private JFrame frame;
 	private JTextField txtUsername;
 	private JTextField txtIPServer;
@@ -65,9 +67,14 @@ public class ClientWindow extends MouseAdapter implements MessageListener{
 	}
 	private void initialize() {
 		frame = new JFrame();
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				user.CloseSession();
+			}
+		});
 		frame.setBounds(100, 100, 800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel, BorderLayout.NORTH);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));

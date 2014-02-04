@@ -1,10 +1,11 @@
 package view;
-
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import java.awt.BorderLayout;
 import java.awt.Insets;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -15,10 +16,31 @@ public class ChatControl extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField inputText;
 	private JTextArea chathistory;
+	private String destinationIP;
+	
+	public String getDestinationIP() {
+		return destinationIP;
+	}
+	public void setDestinationIP(String destinationIP) {
+		this.destinationIP = destinationIP;
+	}
 	public ChatControl() {
 		setLayout(new BorderLayout(0, 0));
 		inputText = new JTextField();
 		inputText.setMargin(new Insets(10, 10, 10, 10));
+		inputText.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (e.getKeyChar() == '\n') {
+					Message message = new Message(ChatControl.this.destinationIP, ChatControl.this.inputText.getText());
+					
+				}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) { }
+			@Override
+			public void keyPressed(KeyEvent e) { }
+		});
 		add(inputText, BorderLayout.SOUTH);
 		inputText.setColumns(10);
 		

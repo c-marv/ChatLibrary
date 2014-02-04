@@ -3,7 +3,6 @@ package model;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Scanner;
 import common.Client;
 import common.Message;
@@ -24,5 +23,9 @@ public class User extends Client{
 		} catch (Exception e) {
 			
 		}
+	}
+	public void CloseSession() {
+		Message message = new Message("SERVER", "DISCONNECT");
+		this.WriteOutputMessage(message);
 	}
 }

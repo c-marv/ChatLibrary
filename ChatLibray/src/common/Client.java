@@ -6,10 +6,11 @@ public class Client extends MessageHandler implements Runnable {
 	protected PrintStream output;
 	protected Thread clientThread;
 	protected UserInformation userInformation;
+
 	public Client() {
 		
 	}
-	public synchronized void WriteOutputMessage(Message message) {
+	public void WriteOutputMessage(Message message) {
 		String jsonmessage = JsonConverter.MessageToJsonString(message);
 		this.output.println(jsonmessage);
 	}
@@ -28,6 +29,7 @@ public class Client extends MessageHandler implements Runnable {
 					Message message = JsonConverter.JsonStringToMessage(this.input.nextLine());
 					message.setSourceIP(this.userInformation.getUserIP());
 					MessageEvent event = new MessageEvent(this, message);
+					System.out.println(message.toString());
 					this.FireMessage(event);
 				}
 			} catch (Exception e) {
