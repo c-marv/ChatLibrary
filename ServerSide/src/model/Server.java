@@ -83,6 +83,7 @@ public class Server extends ServerHandler implements Runnable, MessageListener {
 				client.StopReadMessages();
 				System.out.println("Disconnect " + client.getUserInformation().getUsername());
 				clients.remove(client.getUserInformation());
+				UpdateListClients();
 			}
 		} else {
 			ClientServer client = this.GetClientByIP(e.getMessage().getDestinationIP());
