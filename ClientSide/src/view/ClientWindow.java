@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -33,7 +34,7 @@ public class ClientWindow extends MouseAdapter implements MessageListener{
 	private DefaultListModel<Object> usersmodel;
 	private JTabbedPane tabbedPane;
 	private HashMap<String, ChatControl> tabs;
-	
+	private JList<Object> list;
 	private User user;
 	private HashMap<String, UserInformation> userslist;
 	
@@ -70,7 +71,11 @@ public class ClientWindow extends MouseAdapter implements MessageListener{
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				user.CloseSession();
+				try {
+					user.CloseSession();
+				} catch (Exception e2) {
+					
+				}
 			}
 		});
 		frame.setBounds(100, 100, 800, 600);
@@ -116,13 +121,20 @@ public class ClientWindow extends MouseAdapter implements MessageListener{
 		panel_1.add(lblUsuariosConectados, BorderLayout.NORTH);
 		
 		JButton btnAdicionar = new JButton("Adicionar");
+		btnAdicionar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				UserInformation user = GetUserInformationByName(list.getSelectedValue().toString());
+				AddTab(user);
+			}
+		});
 		panel_1.add(btnAdicionar, BorderLayout.SOUTH);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		panel_1.add(scrollPane, BorderLayout.CENTER);
 		
 		usersmodel = new DefaultListModel<>();
-		JList<Object> list = new JList<Object>(usersmodel);
+		list = new JList<Object>(usersmodel);
 		scrollPane.setViewportView(list);
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -137,13 +149,15 @@ public class ClientWindow extends MouseAdapter implements MessageListener{
 	}
 	public void AddTab(UserInformation user) {
 		ChatControl chatcontrol = new ChatControl();
+		chatcontrol.setUser(this.user);
+		chatcontrol.setDestinationIP(user.getUserIP());
 		tabs.put(user.getUserIP(), chatcontrol);
 		tabbedPane.addTab(user.getUsername(), tabs.get(user.getUserIP()));
 	}
 	public void UpdateList(ArrayList<UserInformation> users) {
 		usersmodel.clear();
 		for (UserInformation userInformation : users) {
-			if (!userInformation.getUserIP().equals(this.user.getUserInformation().getUserIP())) 
+//			if (!userInformation.getUserIP().equals(this.user.getUserInformation().getUserIP())) 
 				usersmodel.addElement(userInformation.getUsername());
 		}
 	}
@@ -155,9 +169,6 @@ public class ClientWindow extends MouseAdapter implements MessageListener{
 				userslist = new HashMap<>();
 				for (UserInformation userInformation : users) {
 					userslist.put(userInformation.getUserIP(), userInformation);
-//					if (!userInformation.getUserIP().equals(this.user.getUserInformation().getUserIP())) {
-//						userslist.put(userInformation.getUserIP(), userInformation);
-//					}
 				}
 				UpdateList(users);
 			}
@@ -169,6 +180,14 @@ public class ClientWindow extends MouseAdapter implements MessageListener{
 			UserInformation sourceuser = this.userslist.get(e.getMessage().getSourceIP()); 
 			chatcontrol.AddMessage(sourceuser.getUsername(), e.getMessage().getText());
 		}
+	}
+	public UserInformation GetUserInformationByName(String username) {
+		for (String userIP : userslist.keySet()) {
+			if (userslist.get(userIP).getUsername().equals(username)) {
+				return userslist.get(userIP);
+			}
+		}
+		return null;
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
