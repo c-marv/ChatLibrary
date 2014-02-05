@@ -157,7 +157,7 @@ public class ClientWindow extends MouseAdapter implements MessageListener{
 	public void UpdateList(ArrayList<UserInformation> users) {
 		usersmodel.clear();
 		for (UserInformation userInformation : users) {
-//			if (!userInformation.getUserIP().equals(this.user.getUserInformation().getUserIP())) 
+			if (!userInformation.getUserIP().equals(this.user.getUserInformation().getUserIP())) 
 				usersmodel.addElement(userInformation.getUsername());
 		}
 	}
@@ -173,10 +173,13 @@ public class ClientWindow extends MouseAdapter implements MessageListener{
 				UpdateList(users);
 			}
 		}else {
-			if (!tabs.containsKey(e.getMessage().getDestinationIP())) {
-				AddTab(this.userslist.get(e.getMessage().getSourceIP()));
+			ChatControl chatcontrol = tabs.get("ALL");
+			if (!e.getMessage().getDestinationIP().equals("ALL")) {
+				if (!tabs.containsKey(e.getMessage().getSourceIP())) {
+					AddTab(this.userslist.get(e.getMessage().getSourceIP()));
+					chatcontrol = tabs.get(e.getMessage().getSourceIP());
+				}
 			}
-			ChatControl chatcontrol = tabs.get(e.getMessage().getDestinationIP());
 			UserInformation sourceuser = this.userslist.get(e.getMessage().getSourceIP()); 
 			chatcontrol.AddMessage(sourceuser.getUsername(), e.getMessage().getText());
 		}
