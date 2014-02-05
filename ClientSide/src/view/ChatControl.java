@@ -11,8 +11,10 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import common.Message;
+import common.MessageEvent;
+import common.MessageHandler;
 
-public class ChatControl extends JPanel {
+public class ChatControl extends MessageHandler {
 	private static final long serialVersionUID = 1L;
 	private JTextField inputText;
 	private JTextArea chathistory;
@@ -23,6 +25,7 @@ public class ChatControl extends JPanel {
 	}
 	public void setDestinationIP(String destinationIP) {
 		this.destinationIP = destinationIP;
+		
 	}
 	public ChatControl() {
 		setLayout(new BorderLayout(0, 0));
@@ -33,7 +36,7 @@ public class ChatControl extends JPanel {
 			public void keyTyped(KeyEvent e) {
 				if (e.getKeyChar() == '\n') {
 					Message message = new Message(ChatControl.this.destinationIP, ChatControl.this.inputText.getText());
-					
+					ChatControl.this.FireMessage(new MessageEvent(ChatControl.this, message));
 				}
 			}
 			@Override

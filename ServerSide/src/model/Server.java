@@ -57,8 +57,9 @@ public class Server extends ServerHandler implements Runnable, MessageListener {
 	private void UpdateListClients() {
 		ArrayList<UserInformation> users = new ArrayList<UserInformation>(clients.keySet());
 		String jsonusers = JsonConverter.ListToJsonString(users);
+		Message message = new Message("SERVER", "USERS", jsonusers);
 		for (UserInformation user : clients.keySet()) {
-			clients.get(user).WriteOutputMessage(new Message("SERVER", "USERS", jsonusers));
+			clients.get(user).WriteOutputMessage(message);
 		}
 	}
 	private boolean IsValidUser(UserInformation userinformation) {

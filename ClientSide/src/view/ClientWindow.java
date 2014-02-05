@@ -130,6 +130,7 @@ public class ClientWindow extends MouseAdapter  implements MessageListener{
 		
 		tabs = new HashMap<String, ChatControl>();
 		ChatControl chatcontrol = new ChatControl();
+		chatcontrol.setDestinationIP("ALL");
 		tabs.put("ALL", chatcontrol);
 		tabbedPane.addTab("Chat Grupal", tabs.get("ALL"));
 	}
@@ -141,7 +142,8 @@ public class ClientWindow extends MouseAdapter  implements MessageListener{
 	public void UpdateList(ArrayList<UserInformation> users) {
 		usersmodel.clear();
 		for (UserInformation userInformation : users) {
-			usersmodel.addElement(userInformation.getUsername());
+			if (!userInformation.getUserIP().equals(this.user.getUserInformation().getUserIP())) 
+				usersmodel.addElement(userInformation.getUsername());
 		}
 	}
 	@Override
@@ -151,7 +153,9 @@ public class ClientWindow extends MouseAdapter  implements MessageListener{
 				ArrayList<UserInformation> users = JsonConverter.JsonStringToList(e.getMessage().getText());
 				userslist = new HashMap<>();
 				for (UserInformation userInformation : users) {
-					userslist.put(userInformation.getUserIP(), userInformation);
+					if (!userInformation.getUserIP().equals(this.user.getUserInformation().getUserIP())) {
+						userslist.put(userInformation.getUserIP(), userInformation);
+					}
 				}
 				UpdateList(users);
 			}

@@ -18,14 +18,14 @@ public class User extends Client{
 			this.socket = new Socket(server, port);
 			this.input = new Scanner(this.socket.getInputStream());
 			this.output = new PrintStream(this.socket.getOutputStream());
-			this.userInformation = new UserInformation(InetAddress.getLocalHost().getHostAddress(), username);
+			this.userInformation = new UserInformation(socket.getInetAddress().getHostAddress(), username);
 			this.WriteOutputMessage(new Message("SERVER", username));
 		} catch (Exception e) {
 			
 		}
 	}
 	public void CloseSession() {
-		Message message = new Message("SERVER", "DISCONNECT");
+		Message message = new Message(this.userInformation.getUserIP(), "SERVER", "DISCONNECT");
 		this.WriteOutputMessage(message);
 	}
 }

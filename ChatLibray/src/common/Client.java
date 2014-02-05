@@ -27,7 +27,7 @@ public class Client extends MessageHandler implements Runnable {
 			try {
 				if (input.hasNextLine()) {
 					Message message = JsonConverter.JsonStringToMessage(this.input.nextLine());
-					message.setSourceIP(this.userInformation.getUserIP());
+//					message.setSourceIP(this.userInformation.getUserIP());
 					MessageEvent event = new MessageEvent(this, message);
 					System.out.println(message.toString());
 					this.FireMessage(event);
@@ -36,5 +36,8 @@ public class Client extends MessageHandler implements Runnable {
 				System.out.println("Error Read Message");
 			}
 		}
+	}
+	public UserInformation getUserInformation() {
+		return userInformation;
 	}
 }
