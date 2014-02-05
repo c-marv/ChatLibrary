@@ -25,7 +25,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-public class ClientWindow extends MouseAdapter  implements MessageListener{
+public class ClientWindow extends MouseAdapter implements MessageListener{
 	private JFrame frame;
 	private JTextField txtUsername;
 	private JTextField txtIPServer;
@@ -132,6 +132,7 @@ public class ClientWindow extends MouseAdapter  implements MessageListener{
 		ChatControl chatcontrol = new ChatControl();
 		chatcontrol.setDestinationIP("ALL");
 		tabs.put("ALL", chatcontrol);
+//		userslist.put("ALL", new UserInformation("ALL", "Chat General"));
 		tabbedPane.addTab("Chat Grupal", tabs.get("ALL"));
 	}
 	public void AddTab(UserInformation user) {
@@ -153,18 +154,20 @@ public class ClientWindow extends MouseAdapter  implements MessageListener{
 				ArrayList<UserInformation> users = JsonConverter.JsonStringToList(e.getMessage().getText());
 				userslist = new HashMap<>();
 				for (UserInformation userInformation : users) {
-					if (!userInformation.getUserIP().equals(this.user.getUserInformation().getUserIP())) {
-						userslist.put(userInformation.getUserIP(), userInformation);
-					}
+					userslist.put(userInformation.getUserIP(), userInformation);
+//					if (!userInformation.getUserIP().equals(this.user.getUserInformation().getUserIP())) {
+//						userslist.put(userInformation.getUserIP(), userInformation);
+//					}
 				}
 				UpdateList(users);
 			}
 		}else {
-			if (!tabs.containsKey(e.getMessage().getSourceIP())) {
+			if (!tabs.containsKey(e.getMessage().getDestinationIP())) {
 				AddTab(this.userslist.get(e.getMessage().getSourceIP()));
 			}
 			ChatControl chatcontrol = tabs.get(e.getMessage().getDestinationIP());
-			chatcontrol.AddMessage(this.userslist.get(e.getMessage().getSourceIP()).getUsername(), e.getMessage().getText());
+			UserInformation sourceuser = this.userslist.get(e.getMessage().getSourceIP()); 
+			chatcontrol.AddMessage(sourceuser.getUsername(), e.getMessage().getText());
 		}
 	}
 	@Override
@@ -175,5 +178,8 @@ public class ClientWindow extends MouseAdapter  implements MessageListener{
 		user = new User(username, serverip, port);
 		user.AddMessageListener(this);
 		user.StartReadMessages();
+		for (String tab : tabs.keySet()) {
+			tabs.get(tab).setUser(user);
+		}
 	}
 }

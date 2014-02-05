@@ -1,8 +1,7 @@
 package common;
 import javax.swing.JPanel;
 import javax.swing.event.EventListenerList;
-public class MessageHandler extends JPanel{
-	private static final long serialVersionUID = 1L;
+public class MessageHandler {
 	EventListenerList listenerList = new EventListenerList();
 	public void AddMessageListener(MessageListener listener) {
 		listenerList.add(MessageListener.class, listener);

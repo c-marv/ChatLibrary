@@ -10,16 +10,25 @@ import java.awt.event.KeyListener;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import model.User;
+
 import common.Message;
 import common.MessageEvent;
 import common.MessageHandler;
 
-public class ChatControl extends MessageHandler {
+public class ChatControl extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField inputText;
 	private JTextArea chathistory;
 	private String destinationIP;
+	private User user;
 	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	public String getDestinationIP() {
 		return destinationIP;
 	}
@@ -35,8 +44,8 @@ public class ChatControl extends MessageHandler {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				if (e.getKeyChar() == '\n') {
-					Message message = new Message(ChatControl.this.destinationIP, ChatControl.this.inputText.getText());
-					ChatControl.this.FireMessage(new MessageEvent(ChatControl.this, message));
+					Message message = new Message(ChatControl.this.user.getUserInformation().getUserIP(), ChatControl.this.destinationIP, ChatControl.this.inputText.getText());
+					user.WriteOutputMessage(message);
 				}
 			}
 			@Override
